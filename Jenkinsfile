@@ -1,9 +1,5 @@
 pipeline {
-    agent { 
-        docker { 
-            image 'golang' 
-        }
-    }
+    agent none
     environment {
         GOCACHE = "/tmp"
         docker_registry = "magalixcorp/k8scicd"
@@ -11,6 +7,11 @@ pipeline {
     }
     stages {
         stage('Build') {
+            agent { 
+                docker { 
+                    image 'golang' 
+                }
+            }
             steps {
                 // Create our project directory.
                 sh 'cd ${GOPATH}/src'
@@ -22,6 +23,11 @@ pipeline {
             }     
         }
         stage('Test') {
+            agent { 
+                docker { 
+                    image 'golang' 
+                }
+            }
             steps {                 
                 // Create our project directory.
                 sh 'cd ${GOPATH}/src'
@@ -34,16 +40,13 @@ pipeline {
                 sh 'go test ./... -v -short'            
             }
         }
-    }
-}
-
-pipeline {
-    stage('Publish') {
-        steps{
-            script {
-                def appimage = docker.build("k8scicd:${env.BUILD_ID}")
-                appimage.push()
-                appimage.push('latest')
+        stage('Publish') {
+            steps{
+                script {
+                    def appimage = docker.build("k8scicd:${env.BUILD_ID}")
+                    appimage.push()
+                    appimage.push('latest')
+                }
             }
         }
     }
