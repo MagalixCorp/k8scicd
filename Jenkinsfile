@@ -6,6 +6,8 @@ pipeline {
     }
     environment {
         GOCACHE = "/tmp"
+        docker_registry = "magalixcorp/k8scicd"
+
     }
     stages {
         stage('Build') {
@@ -30,6 +32,15 @@ pipeline {
                 sh 'go clean -cache'
                 // Run Unit Tests.
                 sh 'go test ./... -v -short'            
+            }
+        }
+        stage('Publish') {
+            steps{
+                script {
+                    def appimage = docker.build("k8scicd:${env.BUILD_ID}")
+                    appimage.push()
+                    appimage.push('latest')
+                }
             }
         }
     }
