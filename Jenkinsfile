@@ -47,7 +47,7 @@ pipeline {
             }
             steps{
                 script {
-                    def appimage = docker.build("k8scicd:${env.BUILD_ID}")
+                    def appimage = docker.build registry + ":$BUILD_NUMBER"
                     appimage.push()
                     appimage.push('latest')
                 }
