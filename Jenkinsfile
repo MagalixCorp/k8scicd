@@ -55,5 +55,8 @@ pipeline {
                 }
             }
         }
+        stage ('Deploy') {
+            
+        }
     }
 }

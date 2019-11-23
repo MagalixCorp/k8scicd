@@ -1,0 +1,6 @@
+hosts: localhost
+tasks:
+- name: Deploy the resource
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'deployment.yml') | from_yaml }}"
