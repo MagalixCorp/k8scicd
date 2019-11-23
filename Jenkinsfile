@@ -34,7 +34,14 @@ pipeline {
                 sh 'go test ./... -v -short'            
             }
         }
-        stage('Publish') {
+    }
+}
+
+pipeline {
+    agent {
+        dockerfile true
+    }
+    stage('Publish') {
             steps{
                 script {
                     def appimage = docker.build("k8scicd:${env.BUILD_ID}")
@@ -43,5 +50,4 @@ pipeline {
                 }
             }
         }
-    }
 }
