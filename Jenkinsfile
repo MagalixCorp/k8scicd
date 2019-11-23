@@ -41,6 +41,10 @@ pipeline {
             }
         }
         stage('Publish') {
+            environment {
+                registry = "magalixcorp/k8scicd"
+                registryCredential = 'dockerhub'
+            }
             steps{
                 script {
                     def appimage = docker.build("k8scicd:${env.BUILD_ID}")
