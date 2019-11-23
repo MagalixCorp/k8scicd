@@ -38,16 +38,13 @@ pipeline {
 }
 
 pipeline {
-    agent {
-        dockerfile true
-    }
     stage('Publish') {
-            steps{
-                script {
-                    def appimage = docker.build("k8scicd:${env.BUILD_ID}")
-                    appimage.push()
-                    appimage.push('latest')
-                }
+        steps{
+            script {
+                def appimage = docker.build("k8scicd:${env.BUILD_ID}")
+                appimage.push()
+                appimage.push('latest')
             }
         }
+    }
 }
